@@ -1,0 +1,17 @@
+.classpath
+.project
+.settings/
+*.class
+/target/
+/.idea/*
+/resources/derbydb2/*
+/resources/tested_circuits/*/circuit_*
+derby.log
+*.iml
+/exports/
+/bin/
+*egg-info
+*pyc
+/resources/results/*
+/demo/job_*
+**/.DS_Store
