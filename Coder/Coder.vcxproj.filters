@@ -15,16 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="coder1.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Dict.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ConfigParse.cpp">
+    <ClCompile Include="Coder.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="DictFactory.cpp">
+    <ClCompile Include="Type.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,10 +29,7 @@
     <ClInclude Include="Dict.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ConfigParse.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DictFactory.h">
+    <ClInclude Include="Type.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

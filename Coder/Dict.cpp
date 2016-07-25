@@ -1,74 +1,119 @@
 #include "Dict.h"
-#include <fstream>
+
 #include <sstream> 
 
-void *  Dict::cellReader(){
-	if(!currentLine.empty()){
-		int index =currentLine.find("/t");
-		std::string str = currentLine.substr(0,index);
-		if(vec[currentcell]=="int"){	
-			std::istringstream  iss(str);
-			int value;
-			iss>>value; 
-			return &value;
-		}
-		else if(vec[currentcell]=="float"){	
-			std::istringstream  iss(str);
-			float value;
-			iss>>value; 
-			return &value;
-		}
-		else if(vec[currentcell]=="char"){
-			char * tmp;
-			strcpy(tmp,str.c_str());
-			return  tmp;
-		}
-		else if(vec[currentcell]=="array"){
-			int index = str.find(":");
-			std::string subnum = str.substr(0,index);
-			std::istringstream iss(subnum);
-			int num;
-			iss>>num;
-			int start=index,end;
-			
-		    for(int i=0;i <num ;i++){
-				end = str.substr(start, str.size()).find(',');
-				std::string  item = str.substr(start, end);
-				start = end;
-				if(item =="int"){	
-			     std::istringstream  iss(item);
-			     int value;
-			     iss>>value;
-                 //itemarray[num] = value;			     
-		          }
-				else if(vec[currentcell]=="float"){	
-					std::istringstream  iss(str);
-					float value;
-					iss>>value; 
-					return &value;
-				}
-				else if(vec[currentcell]=="char"){
-					char * tmp;
-					strcpy(tmp,str.c_str());
-					return  tmp;
-				}
-			}
-			return nullptr;
-		}
-	}
-}
-
-void Dict::readLine(){
-	std::ifstream file( filepath);
-   file >> currentLine;
-	file.close();
-}
-
-Dict::Dict(void)
+Dict::Dict(std::string path)
 {
+   m_filepath = path;
 }
 
 
 Dict::~Dict(void)
 {
 }
+
+bool Dict::open()
+{
+   std::ifstream m_fs(m_filepath);
+   return true;
+}
+
+bool Dict::close()
+{
+   m_fs.close();
+   return true;
+}
+
+bool Dict::next()
+{
+   if (m_currentLine.empty())
+      return false;
+
+   int index = m_currentLine.find('\t');
+   if (index == -1)
+   {
+      return false;
+   }
+   else
+   {
+      m_currentCell = m_currentLine.substr(0, index);
+      m_currentLine = m_currentCell.erase(0, index);
+
+      return true;
+   }
+}
+
+bool Dict::readLine(){
+
+   m_fs >> m_currentLine;
+
+   if (m_currentLine.empty())
+      return false;
+   else
+      return true;
+}
+
+void Dict::readArray(int *array)
+{
+   int num = readInt(m_currentCell.substr(0, m_currentCell.find(':')));
+
+   int value;
+   for (int i = 0; i < num; i++)
+   {
+      value = readInt(m_currentCell.substr(0, m_currentCell.find(',')));
+      array[i] = value;
+   }
+}
+
+void Dict::readArray(float *array)
+{
+   int num = readInt(m_currentCell.substr(0, m_currentCell.find(':')));
+
+   float value;
+   for (int i = 0; i < num; i++)
+   {
+      value = readFloat(m_currentCell.substr(0, m_currentCell.find(',')));
+      array[i] = value;
+   }
+}
+
+void Dict::readArray(char **array)
+{
+   int num = readInt(m_currentCell.substr(0, m_currentCell.find(':')));
+
+   char *value;
+   for (int i = 0; i < num; i++)
+   {
+      value = readChar(m_currentCell.substr(0, m_currentCell.find(',')));
+      array[i] = value;
+   }
+}
+
+#pragma region private
+
+int  Dict::readInt(std::string str)
+{
+   std::istringstream iss(str);
+   int value;
+   iss >> value;
+   return value;
+}
+
+float Dict::readFloat(std::string str)
+{
+   std::istringstream iss(str);
+   float value;
+   iss >> value;
+   return value;
+}
+
+char *Dict::readChar(std::string str)
+{
+   char *tmp = new char[str.size()];
+   strcpy_s(tmp, str.size(), str.c_str());
+   return tmp;
+}
+
+#pragma endregion
+
+
