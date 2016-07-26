@@ -64,11 +64,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Coder.cpp" />
-    <ClCompile Include="Type.cpp" />
+    <ClCompile Include="CustomType.cpp" />
     <ClCompile Include="Dict.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Type.h" />
+    <ClInclude Include="CustomType.h" />
     <ClInclude Include="Dict.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

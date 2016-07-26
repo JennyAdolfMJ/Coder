@@ -2,11 +2,11 @@
 
 #include <sstream> 
 
-Dict::Dict(std::string path)
+Dict::Dict(std::string path, std::vector<Type>& types)
 {
    m_filepath = path;
+   m_types = types;
 }
-
 
 Dict::~Dict(void)
 {
