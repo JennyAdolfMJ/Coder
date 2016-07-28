@@ -12,6 +12,8 @@ enum Type
    customType
 };
 
+class NotSupportedException {};
+
 class Dict
 {
 public:
@@ -23,13 +25,10 @@ public:
 
    bool next();
    bool readLine();
-   void readArray(int *);
-   void readArray(float *);
-   void readArray(char **);
 
    template <class T>
    T read() {
-      T tmp("");
+      T tmp(m_currentCell);
       return tmp; 
    };
 
@@ -43,15 +42,71 @@ public:
       return readFloat(m_currentCell);
    }
 
-   template <> char *read<char *>()
+   template <class T>
+   T read(unsigned &size) {
+      throw NotSupportedException();
+   };
+
+   template <> char *read<char *>(unsigned &length)
    {
-      return readChar(m_currentCell);
+      return readChar(m_currentCell, length);
+   }
+
+   template <> int* read<int *>(unsigned &size)
+   {
+      size = readInt(m_currentCell.substr(0, m_currentCell.find(':')));
+      int *tmp = new int[size];
+
+      int value; unsigned index;
+      for (unsigned i = 0; i < size; i++)
+      {
+         index = m_currentCell.find(',');
+         value = readInt(m_currentCell.substr(0, index));
+         m_currentCell.erase(0, index);
+         tmp[i] = value;
+      }
+
+      return tmp;
+   }
+
+   template <> float* read<float *>(unsigned &size)
+   {
+      size = readInt(m_currentCell.substr(0, m_currentCell.find(':')));
+      float *tmp = new float[size];
+
+      float value; unsigned index;
+      for (unsigned i = 0; i < size; i++)
+      {
+         index = m_currentCell.find(',');
+         value = readFloat(m_currentCell.substr(0, index));
+         m_currentCell.erase(0, index);
+         tmp[i] = value;
+      }
+
+      return tmp;
+   }
+
+   template <> std::string* read<std::string *>(unsigned &size)
+   {
+      size = readInt(m_currentCell.substr(0, m_currentCell.find(':')));
+      std::string *tmp = new std::string[size];
+
+      std::string value; unsigned index;
+      for (unsigned i = 0; i < size; i++)
+      {
+         index = m_currentCell.find(',');
+         value = m_currentCell.substr(0, index);
+         m_currentCell.erase(0, index);
+         tmp[i] = value;
+      }
+
+      return tmp;
    }
 
 private:
    int readInt(std::string);
    float readFloat(std::string);
-   char *readChar(std::string);
+   char *readChar(std::string, unsigned &);
    
 private:
    std::string m_filepath;

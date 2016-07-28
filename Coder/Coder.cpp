@@ -22,11 +22,15 @@ int main()
          case Type::floatType:
             dict.read<float>(); break;
          case Type::charType:
-            // TODO
-            dict.read<char *>(); break;
+         {
+            unsigned size;
+            dict.read<char *>(size); break;
+         }
          case Type::arrayType:
-            // TODO
-            dict.read<void *>(); break;
+         {
+            unsigned size;
+            dict.read<void *>(size); break;
+         }
          case Type::customType:
             dict.read<CustomType>(); break;
          }

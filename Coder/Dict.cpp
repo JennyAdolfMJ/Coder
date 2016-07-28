@@ -53,42 +53,6 @@ bool Dict::readLine(){
       return true;
 }
 
-void Dict::readArray(int *array)
-{
-   int num = readInt(m_currentCell.substr(0, m_currentCell.find(':')));
-
-   int value;
-   for (int i = 0; i < num; i++)
-   {
-      value = readInt(m_currentCell.substr(0, m_currentCell.find(',')));
-      array[i] = value;
-   }
-}
-
-void Dict::readArray(float *array)
-{
-   int num = readInt(m_currentCell.substr(0, m_currentCell.find(':')));
-
-   float value;
-   for (int i = 0; i < num; i++)
-   {
-      value = readFloat(m_currentCell.substr(0, m_currentCell.find(',')));
-      array[i] = value;
-   }
-}
-
-void Dict::readArray(char **array)
-{
-   int num = readInt(m_currentCell.substr(0, m_currentCell.find(':')));
-
-   char *value;
-   for (int i = 0; i < num; i++)
-   {
-      value = readChar(m_currentCell.substr(0, m_currentCell.find(',')));
-      array[i] = value;
-   }
-}
-
 #pragma region private
 
 int  Dict::readInt(std::string str)
@@ -107,9 +71,11 @@ float Dict::readFloat(std::string str)
    return value;
 }
 
-char *Dict::readChar(std::string str)
+char* Dict::readChar(std::string str, unsigned& size)
 {
-   char *tmp = new char[str.size()];
+   size = str.size();
+   char *tmp = new char[size];
+
    strcpy_s(tmp, str.size(), str.c_str());
    return tmp;
 }
